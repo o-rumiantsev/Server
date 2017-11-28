@@ -4,14 +4,19 @@ const net = require('net');
 
 const history = new Set();
 const sockets = new Map();
+let connections = 0;
+
 const server = net.createServer((socket) => {
   const ip = socket.remoteAddress;
   if (!sockets.has(ip)) {
     console.log(`Client ${ip} connected`);
     sockets.set(ip, socket);
+    connections++;
 
     for (const msg of history) socket.write(msg);
-    socket.write(`\nYou are on server\nYour IP: ${ip}\n`);
+    socket.write(
+      `\nYou are on server\nOnline ${connections}\nYour IP: ${ip}\n`
+    );
 
     sockets.forEach((sckt) => {
       if (sckt !== socket) {
@@ -35,6 +40,7 @@ const server = net.createServer((socket) => {
     socket.on('end', () => {
       console.log(`Client ${socket.remoteAddress} disconnected`);
       sockets.delete(ip);
+      connections--;
       sockets.forEach((sckt) => {
         sckt.write(`${socket.remoteAddress} disconnected\n`);
       });
