@@ -10,12 +10,6 @@ const clients = new Set();
 const server = http.createServer((req, res) => {
   console.log(req.url);
 
-  const ip = res.socket.remoteAddress;
-  const port = res.socket.remotePort;
-  clients.add(res.socket);
-  console.log(ip, port);
-
-
   switch (req.url) {
     // case '/style.css': {
     //   res.writeHead(200, { 'Content-Type': 'text/css' });
