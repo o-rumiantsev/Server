@@ -5,8 +5,6 @@ const http = require('http');
 const html = fs.readFileSync('../HTML/index.html');
 // const css  = fs.readFileSync('./res/style.css');
 
-const clients = new Set();
-
 const server = http.createServer((req, res) => {
   console.log(req.url);
 
@@ -23,4 +21,8 @@ const server = http.createServer((req, res) => {
   }
 
   res.end();
-}).listen(8080, '192.168.0.106');
+}).listen(8080, '192.168.0.107');
+
+server.on('error', (err) => {
+  throw err;
+});
