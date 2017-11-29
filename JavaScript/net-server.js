@@ -20,14 +20,14 @@ const server = net.createServer((socket) => {
 
     sockets.forEach((sckt) => {
       if (sckt !== socket) {
-        sckt.write(`${socket.remoteAddress} connected\n`);
+        sckt.write(`${ip} connected\n`);
       }
     });
 
     socket.setEncoding('utf8');
     socket.on('data', (data) => {
       if (data !== '') {
-        const msg = `📨  ${socket.remoteAddress}: ` + data;
+        const msg = `📨  ${ip}: ` + data;
         history.add(msg);
         sockets.forEach((sckt) => {
           if (sckt !== socket) {
@@ -38,11 +38,11 @@ const server = net.createServer((socket) => {
     });
 
     socket.on('end', () => {
-      console.log(`Client ${socket.remoteAddress} disconnected`);
+      console.log(`Client ${ip} disconnected`);
       sockets.delete(ip);
       connections--;
       sockets.forEach((sckt) => {
-        sckt.write(`${socket.remoteAddress} disconnected\n`);
+        sckt.write(`${ip} disconnected\n`);
       });
     });
   } else socket.end();
