@@ -1,6 +1,9 @@
 'use strict';
 
+const os = require('os');
 const net = require('net');
+
+const ip = os.networkInterfaces().wlp2s0[0].address;
 
 const history = new Set();
 const sockets = new Map();
@@ -26,7 +29,7 @@ const server = net.createServer((socket) => {
 
     socket.setEncoding('utf8');
     socket.on('data', (data) => {
-      if (data !== '') {
+      if (data !== '\r\n') {
         const msg = `📨  ${ip}: ` + data;
         history.add(msg);
         sockets.forEach((sckt) => {
@@ -48,7 +51,7 @@ const server = net.createServer((socket) => {
   } else socket.end();
 });
 
-server.listen(8080, '192.168.0.107');
+server.listen(8080, ip);
 server.on('error', (err) => {
   throw err;
 });
